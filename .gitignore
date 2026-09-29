@@ -1,0 +1,16 @@
+# Python (backend)
+be/.venv/
+be/**/__pycache__/
+*.pyc
+be/.env
+
+# Node (frontend)
+fe/node_modules/
+fe/dist/
+
+# Large full data dump (375MB) — schema-only version kept under DB_1107/DB_1107/Dump20251107(스키마만)/
+DB_1107/DB_1107/TT_DB_20251107.sql
+
+# OS
+.DS_Store
+Thumbs.db

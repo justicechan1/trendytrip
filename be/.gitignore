@@ -1,0 +1,4 @@
+.venv/*
+%programdata%/
+__pycache__/*
+*.pyc

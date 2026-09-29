@@ -1,0 +1,16 @@
+{
+  "start_transport_id": 1,
+  "end_transport_id": 1,
+  "total_days": 2,
+  "start_time": "06:00",
+  "end_time": "23:00",
+  "hashtags": [
+    "#새벽출발",
+    "#야간여행"
+  ],
+  "daily_locations": [
+    10,
+    11
+  ],
+  "start_date": "2025-05-01"
+}

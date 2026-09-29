@@ -1,0 +1,15 @@
+{
+  "start_transport_id": 1,
+  "end_transport_id": 1,
+  "total_days": 1,
+  "start_time": "09:00",
+  "end_time": "18:00",
+  "hashtags": [
+    "#당일치기",
+    "#간단여행"
+  ],
+  "daily_locations": [
+    10
+  ],
+  "start_date": "2025-02-01"
+}

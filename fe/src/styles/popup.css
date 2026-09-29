@@ -1,0 +1,65 @@
+/* 공통 팝업 컨테이너 */
+.popup-container {
+  display: flex;
+  flex-direction: column;
+  /* 내부 콘텐츠를 세로로 쌓기 */
+  width: 20vw;
+  height: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  background-color: #fff;
+  border: 2px solid skyblue;
+  border-radius: 8px;
+  overflow: hidden;
+  /* 내부에서 스크롤 처리 */
+  position: relative;
+  gap: 16px;
+  /* 각 영역 사이의 간격을 설정 */
+}
+
+/* header는 위쪽에 위치하고 본인 콘텐츠를 차지 */
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  /* 아래쪽에 간격을 추가 */
+  flex-shrink: 0;
+  /* 크기가 줄어들지 않도록 설정 */
+}
+
+/* 중간 영역 */
+article {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex-grow: 1;
+  /* 남은 공간을 최대한 차지하도록 설정 */
+  overflow-y: auto;
+  /* 넘치는 콘텐츠는 스크롤 처리 */
+}
+
+/* footer는 항상 맨 아래에 고정되고 높이는 auto로 */
+footer {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+  margin-top: auto;
+  /* 맨 아래에 고정 */
+  flex-shrink: 0;
+  /* 높이가 줄어들지 않도록 설정 */
+  width: 100%;
+}
+
+/* 닫기 버튼 */
+.button-close {
+  padding: 8px 16px;
+  border: none;
+  width: 50%;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.button-close:hover {
+  background-color: rgb(235, 226, 226);
+}
