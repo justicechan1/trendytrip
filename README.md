@@ -1,6 +1,6 @@
 # Trendy Trip
 
-해시태그 기반 감성 검색으로 맞춤 여행 일정을 추천하는 제주 여행 서비스입니다. 이 중 장소 검색 API를 담당했습니다.
+해시태그 기반 감성 검색으로 맞춤 여행 일정을 추천하는 제주 여행 서비스입니다. 팀원이 개발한 추천·일정 최적화 알고리즘을 FastAPI 서비스로 연결하는 백엔드 API 전체를 담당했습니다.
 
 <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
 <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white">
@@ -16,28 +16,43 @@
 | 항목 | 내용 |
 |---|---|
 | 개발 기간 | 2025.01 ~ 2025.11 |
-| 담당 | 장소 검색 API — 음식점·카페·관광지·숙소 통합 검색, 장소 상세 조회 |
+| 담당 | Back-end API (`be/app`) — 장소 검색, 해시태그 지도 탐색, 일정 생성·재계산 API 설계 및 알고리즘 연동 |
+| 수상 | 교내 공학작품 전시회 최우수상 |
 | 배경 | 여행지를 조건으로 검색하는 것을 넘어, 원하는 '분위기'로 장소를 찾고 하루 일정까지 자동으로 짜주는 제주 여행 플래너 |
 
 ## 아키텍처
 
 ```
 fe/  Vue 3 + TypeScript + Vite    — 지도(Naver Maps) 기반 일정 플래너 UI, PDF/HTML 내보내기
-be/  FastAPI                      — 장소 검색·일정 생성 API
-  app/routers/places.py           — 장소 검색 API (담당)
-  app/core/search.py, vector.py   — 해시태그 유사도 계산 (팀원)
-  app/cache.py                    — 사용자별 임시 일정/장소 인메모리 캐시 (팀원)
-  TripScheduler/                  — OR-Tools 기반 경로/일정 최적화 엔진 (팀원)
-  TripRecommendationSystem/       — 해시태그 임베딩 유사도 기반 장소 추천 (팀원)
+be/
+  app/                            — FastAPI 서버 (담당)
+    routers/places.py             — 장소 통합 검색, 상세 조회
+    routers/maps.py               — 지도 영역 내 해시태그 집계, 해시태그 유사 장소 검색
+    routers/schedules.py          — 여행 일정 초기 생성, 일자별 동선 조회
+    routers/trip_planner.py       — 일정 최적화 엔진 호출, 일정 재계산
+    core/vector.py                — 임베딩 벡터 정규화
+    cache.py                      — 사용자별 일정 인메모리 캐시
+  TripScheduler/                  — OR-Tools 기반 경로/일정 최적화 알고리즘 (팀원)
+  TripRecommendationSystem/       — 해시태그 임베딩 기반 장소 추천 알고리즘 (팀원)
 ```
 
 ## 주요 기능
 
-- **장소 검색 (담당)**: 음식점·카페·관광지·숙소를 이름·카테고리·주소 키워드로 통합 검색하고, 장소 상세(주소·좌표·영업시간·편의시설·사진) 조회
-- **해시태그 기반 감성 추천**: 장소 해시태그 임베딩 유사도로 분위기에 맞는 장소 추천
+- **장소 검색**: 음식점·카페·관광지·숙소를 이름·카테고리·주소 키워드로 통합 검색하고, 장소 상세(주소·좌표·영업시간·편의시설·사진) 조회
+- **해시태그 지도 탐색**: 현재 지도 화면(viewport) 안의 장소 해시태그를 빈도순으로 집계하고, 선택한 해시태그와 임베딩 유사도가 높은 장소를 반환
 - **자동 일정 생성**: OR-Tools로 방문 시간대·영업시간·필수 방문지·이동 동선을 고려한 하루 일정 자동 배치
 - **지도 시각화**: Naver Maps 연동, 일정을 경로선(Path)으로 시각화
 - **일정 내보내기**: 완성된 일정을 PDF/HTML로 내보내기
+
+## 트러블슈팅
+
+1. **임베딩 벡터 타입 혼재·0벡터 예외 방어**
+   - 문제: DB에서 읽은 해시태그 임베딩이 list/ndarray로 혼재되어 들어오고, 일부 항목은 0벡터라 코사인 유사도 계산 시 0으로 나누는 문제가 발생할 수 있었음
+   - 해결: 임베딩을 `np.ndarray`로 강제 변환하고, L2 정규화 시 `+1e-8` epsilon을 더해 0벡터로 인한 `ZeroDivisionError`를 방지 (`vector.py`, `maps.py`)
+
+2. **일정 재계산 응답속도 개선**
+   - 문제: 사용자가 일정을 수정할 때마다 추천 로직 전체가 재실행되어 응답이 느려짐
+   - 해결: 일정 재계산 API(`trip_planner.py`)를 조회 API와 분리하고, 세션 단위 인메모리 캐시(`cache.py`)로 직전 조회 결과를 재사용해 응답속도 개선
 
 ## 로컬 실행
 
