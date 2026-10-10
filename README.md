@@ -1,6 +1,6 @@
 # Trendy Trip
 
-해시태그 기반 감성 검색으로 맞춤 여행 일정을 추천하는 제주 여행 서비스입니다. 팀원이 개발한 추천·일정 최적화 알고리즘을 FastAPI 서비스로 연결하는 백엔드 API 전체를 담당했습니다.
+해시태그 기반 감성 검색으로 맞춤 여행 일정을 추천하는 제주 여행 서비스입니다. 알고리즘 팀원과 입출력 JSON 규격을 맞춰, 추천·일정 최적화 알고리즘을 서비스로 연결하는 FastAPI 백엔드 API 전체를 설계·구현했습니다.
 
 <img src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
 <img src="https://img.shields.io/badge/FastAPI-009688?style=flat-square&logo=fastapi&logoColor=white">
@@ -16,7 +16,7 @@
 | 항목 | 내용 |
 |---|---|
 | 개발 기간 | 2025.01 ~ 2025.11 |
-| 담당 | Back-end API (`be/app`) — 장소 검색, 해시태그 지도 탐색, 일정 생성·재계산 API 설계 및 알고리즘 연동 |
+| 담당 | Back-end API (`be/app`) — 알고리즘 팀원이 요구한 데이터를 기준으로 API 설계, DB 장소·해시태그 데이터를 알고리즘 입력 JSON으로 구성하고 출력 JSON을 받아 화면용 응답으로 변환 (장소 검색, 해시태그 지도 탐색, 일정 생성·재계산) |
 | 수상 | 교내 공학작품 전시회 최우수상 |
 | 배경 | 여행지를 조건으로 검색하는 것을 넘어, 원하는 '분위기'로 장소를 찾고 하루 일정까지 자동으로 짜주는 제주 여행 플래너 |
 
@@ -29,7 +29,7 @@ be/
     routers/places.py             — 장소 통합 검색, 상세 조회
     routers/maps.py               — 지도 영역 내 해시태그 집계, 해시태그 유사 장소 검색
     routers/schedules.py          — 여행 일정 초기 생성, 일자별 동선 조회
-    routers/trip_planner.py       — 일정 최적화 엔진 호출, 일정 재계산
+    routers/trip_planner.py       — 알고리즘 입력 JSON 구성 → 일정 최적화 엔진 호출 → 출력 JSON 변환, 일정 재계산
     core/vector.py                — 임베딩 벡터 정규화
     cache.py                      — 사용자별 일정 인메모리 캐시
   TripScheduler/                  — OR-Tools 기반 경로/일정 최적화 알고리즘 (팀원)
